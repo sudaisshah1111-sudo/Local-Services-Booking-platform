@@ -1,0 +1,66 @@
+# ER Diagram — Local Services Booking Platform
+
+```mermaid
+erDiagram
+    USERS ||--o{ SERVICES : "offers (provider)"
+    USERS ||--o{ BOOKINGS : "makes (customer)"
+    USERS ||--o{ BOOKINGS : "receives (provider)"
+    USERS ||--o{ NOTIFICATIONS : "receives"
+    USERS ||--o{ REVIEWS : "writes (customer)"
+    USERS ||--o{ AVAILABILITYSLOTS : "sets (provider)"
+
+    SERVICES ||--o{ BOOKINGS : "booked via"
+    AVAILABILITYSLOTS ||--o{ BOOKINGS : "reserved via"
+    BOOKINGS ||--o| REVIEWS : "reviewed after"
+    BOOKINGS ||--o{ NOTIFICATIONS : "triggers"
+
+    USERS {
+        ObjectId _id
+        string name
+        string email
+        string passwordHash
+        string profilePicUrl
+        string role
+    }
+    SERVICES {
+        ObjectId _id
+        ObjectId providerId
+        string title
+        string description
+        string category
+        number durationMinutes
+        number price
+        boolean isActive
+    }
+    AVAILABILITYSLOTS {
+        ObjectId _id
+        ObjectId providerId
+        string dayOfWeek
+        string startTime
+        string endTime
+        boolean isBooked
+    }
+    BOOKINGS {
+        ObjectId _id
+        ObjectId customerId
+        ObjectId providerId
+        ObjectId serviceId
+        ObjectId slotId
+        string status
+    }
+    REVIEWS {
+        ObjectId _id
+        ObjectId bookingId
+        ObjectId customerId
+        ObjectId providerId
+        number rating
+        string comment
+    }
+    NOTIFICATIONS {
+        ObjectId _id
+        ObjectId userId
+        ObjectId bookingId
+        string message
+        string type
+        boolean isRead
+    }
